@@ -1,0 +1,76 @@
+version: '3.9'
+
+volumes:
+  data:
+    name: api_data
+  db_data:
+    name: api_postgres
+
+networks:
+  basic:
+
+services:
+  api:
+    build: ./backend
+    container_name: web_api
+    entrypoint: >
+      sh -c "gunicorn --bind :8000 main:app -k uvicorn.workers.UvicornWorker --preload"
+    volumes:
+      - data:/data
+    env_file:
+      - .env
+    networks:
+      - basic
+    expose:
+      - ${API_PORT}
+    tty: true
+    depends_on:
+      - postgres
+    restart: on-failure
+
+  postgres:
+    image: postgres:latest
+    container_name: api_db
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    networks:
+      - basic
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    restart: on-failure
+
+  vue-app:
+    build: ./frontend
+    container_name: vue_app
+    volumes:
+      - './frontend:/app'
+      - '/app/node_modules'
+    networks:
+      - basic
+    env_file:
+      - .env
+    expose: 
+      - ${VUE_PORT}
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    depends_on:
+      - api
+      - vue-app
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - './frontend:/app'
+    networks:
+      - basic
+    ports:
+      - "80:80"
+      - "8000:8000"
+      - "8080:8080"
+    restart: always
