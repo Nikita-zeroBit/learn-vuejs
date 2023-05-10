@@ -1,4 +1,5 @@
 from uuid import UUID
+from typing import List
 
 from schemas.mixins import OrjsonMixin, PaginatedListMixin
 
@@ -20,7 +21,7 @@ class Book(BooksBase):
 
 
 class BooksList(PaginatedListMixin):
-    results: list[Book] = []
+    results: List[Book] = []
 
     class Config:
         orm_mode = True

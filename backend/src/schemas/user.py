@@ -18,6 +18,7 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     id: UUID
+    password: str
 
 
 class UserList(PaginatedListMixin):

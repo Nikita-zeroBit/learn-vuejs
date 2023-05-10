@@ -9,23 +9,33 @@ export default createRouter({
     base: __dirname,
     routes: [
         {
+            path: '/',
+            name: 'HomePage',
+            component: () => import('./components/Home.vue'),
+            meta: {layout: 'basic-layout'}
+        },
+        {
             path: '/users',
             component: Users,
+            meta: {layout: 'basic-layout'},
             name: 'users'
         },
         {
             path: '/add-user',
             component: AddUser,
+            meta: {layout: 'basic-layout'},
             name: 'add-user'
         },
         {
             path: '/add-book',
             component: AddBook,
+            meta: {layout: 'basic-layout'},
             name: 'add-book'
         },
         {
             path: '/books',
             component: Books,
+            meta: {layout: 'basic-layout'},
             name: 'books'
         },
     ]

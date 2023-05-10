@@ -1,10 +1,11 @@
 from math import ceil
+from typing import Dict
 
 from core import messages
 
 
 def compute_page_numbers(current_page: int, records_per_page: int, total_records: int, start_from_zero: bool = False,
-                         raise_if_current_out_of_range: bool = False) -> dict[str: int]:
+                         raise_if_current_out_of_range: bool = False) -> Dict:
     if records_per_page <= 0:
         raise ValueError(messages.SHOULD_BE_GREATER_THAN.format('records_per_page', 0))
     if total_records == 0:

@@ -1,38 +1,28 @@
 <template>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-6 offset-sm-3">
-                <form id="books-form" method="post" @submit.prevent="checkForm" novalidate="true">
-                    <div v-if="books.error" class="form-group mt-1">
-                        <div class="alert alert-danger">{{ books.error }}</div>
-                    </div>
-                    <div v-if="books.message" class="form-group mt-1">
-                        <div class="alert alert-success">{{ books.message }}</div>
-                    </div>
-                    <div class="form-group mt-3" style="text-align: left">
-                        <label for="title">Title</label>
-                        <input v-model="books.title" type="text" class="form-control" id="title"
-                            placeholder="Enter books's title" />
-                    </div>
-                    <div class="form-group mt-3" style="text-align: left">
-                        <label for="description">Description</label>
-                        <textarea v-model="books.description" class="form-control" name="description" id="description"
-                            placeholder="bookss's email"></textarea>
-                    </div>
-                    <div class="form-group mt-3" style="text-align: left">
-                        <label for="description">Year</label>
-                        <textarea v-model="books.year" class="form-control" name="year" id="year"
-                            placeholder="books's year"></textarea>
-                    </div>
-                    <div class="form-group mt-3">
-                        <button type="submit" class="btn btn-primary btn-lg btn-block">
-                            Submit
-                        </button>
-                    </div>
-                </form>
-            </div>
+    <form id="books-form" method="post" @submit.prevent="checkForm" novalidate="true" action="/books">
+        <div v-if="books.error" class="form-group mt-1">
+            <Message-prime severity="error">{{ books.error }}</Message-prime>
         </div>
-    </div>
+        <div v-if="books.message" class="form-group mt-1">
+            <Message-prime severity="success">{{ books.message }}</Message-prime>
+        </div>
+        <Card-prime>
+            <template #title> Book Information </template>
+            <template #content> 
+                <label for="title">Title</label>
+                <InputText-prime id="title" type="text" v-model="books.title" placeholder="Enter title of a book"/>
+                <label for="title">Description</label>
+                <InputText-prime id="description" type="text" v-model="books.description" placeholder="Enter description of a book"/>
+                <label for="title">Year</label>
+                <InputText-prime id="year" type="number" max=2023 v-model="books.year" placeholder="Enter year of creating"/>
+            </template>
+            <template #footer>
+                <Button-prime type="btn btn-danger" label="Submit" icon="pi">
+                    <a class="btn text-white" href="/books" style="text-decoration: none; color: Black">Add book</a>
+                </Button-prime>
+            </template>
+        </Card-prime>
+    </form>
 </template>
 
 <script>
@@ -64,9 +54,12 @@
 
                         this.books.message = "Book added successfully";
 
+                        window.location.href = '/books'
+
                         return;
                     } catch (error) {
                         this.books.error = error;
+                        console.log(error);
                         return;
                     }
                 }
@@ -84,3 +77,40 @@
         },
     };
 </script>
+
+<style>
+
+    a {
+        color: black;
+        text-decoration: none;
+    }
+
+   #books-form {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding-left: 0;
+    }
+
+    .p-card {
+        margin: 40px 0 0;
+        width: 25em;
+        left: 50%;
+    }
+
+    .p-card-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    label {
+        margin-top: 20px;
+    }
+
+    .p-message {
+        left: 70%;
+    }
+
+</style>

@@ -1,6 +1,7 @@
 import orjson
 from fastapi import Query
 from pydantic import BaseModel
+from typing import Union
 
 
 DEFAULT_PAGE_SIZE = 10
@@ -22,8 +23,8 @@ class PaginatedParams(OrjsonMixin):
 
 
 class PaginatedListMixin(OrjsonMixin):
-    prev: int | None
-    next: int | None
-    first: int | None
-    last: int | None
+    prev: Union[int, None]
+    next: Union[int, None]
+    first: Union[int, None]
+    last: Union[int, None]
     results: list  # list of objects

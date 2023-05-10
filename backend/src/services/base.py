@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import TypeVar
+from typing import TypeVar, List
 from uuid import UUID
 
 from fastapi import HTTPException
@@ -42,7 +42,7 @@ class BaseService:
             raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail=RECORD_NOT_FOUND)
         return record
 
-    def get_list(self, order_by: str = 'id') -> list[Record]:
+    def get_list(self, order_by: str = 'id') -> List[Record]:
         query = self.db.query(self.model)
         order = getattr(self.model, order_by)
         return query.order_by(order).all()
